@@ -59,6 +59,8 @@ const RegisterForm = ({ user }: { user: User }) => {
     }
 
     try {
+      console.log("Form Submitted:", values); // Check if the form triggers submission
+
       const patient = {
         userId: user.$id,
         name: values.name,

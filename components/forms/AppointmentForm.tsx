@@ -57,6 +57,8 @@ export const AppointmentForm = ({
     values: z.infer<typeof AppointmentFormValidation>
   ) => {
     setIsLoading(true);
+    console.log("Form Submitted:", values); // Log form submission
+    console.log("Received Type in AppointmentForm:", type);
 
     let status;
     switch (type) {
@@ -71,7 +73,11 @@ export const AppointmentForm = ({
     }
 
     try {
+      console.log("Received Type in AppointmentForm:", type);
+
       if (type === "create" && patientId) {
+        console.log("Creating appointment..."); // Trace point
+
         const appointment = {
           userId,
           patient: patientId,
@@ -82,7 +88,11 @@ export const AppointmentForm = ({
           note: values.note,
         };
 
+        console.log("Appointment Data:", appointment); // Check appointment data
+
         const newAppointment = await createAppointment(appointment);
+
+        console.log("New Appointment Response:", newAppointment); // Check API response
 
         if (newAppointment) {
           form.reset();
@@ -91,6 +101,8 @@ export const AppointmentForm = ({
           );
         }
       } else {
+        console.log("Updating appointment..."); // Trace point for updates
+
         const appointmentToUpdate = {
           userId,
           appointmentId: appointment?.$id!,
@@ -101,10 +113,11 @@ export const AppointmentForm = ({
             cancellationReason: values.cancellationReason,
           },
           type,
-          timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone, // Added this line
+          timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
         };
-        
+
         const updatedAppointment = await updateAppointment(appointmentToUpdate);
+        console.log("Updated Appointment:", updatedAppointment); // Log update response
 
         if (updatedAppointment) {
           setOpen && setOpen(false);
@@ -112,11 +125,11 @@ export const AppointmentForm = ({
         }
       }
     } catch (error) {
-      console.log(error);
+      console.error("Error during submission:", error); // Log errors
     }
+
     setIsLoading(false);
   };
-
   let buttonLabel;
   switch (type) {
     case "cancel":

@@ -4,8 +4,18 @@ import { twMerge } from "tailwind-merge";
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
+export const parseStringify = (value: any) => {
+  if (value === undefined || value === null) {
+    return {}; // Return an empty object if value is undefined or null
+  }
 
-export const parseStringify = (value: any) => JSON.parse(JSON.stringify(value));
+  try {
+    return JSON.parse(JSON.stringify(value));
+  } catch (error) {
+    console.error("Error parsing value:", error);
+    return {}; // Return an empty object if JSON parsing fails
+  }
+};
 
 export const convertFileToUrl = (file: File) => URL.createObjectURL(file);
 
